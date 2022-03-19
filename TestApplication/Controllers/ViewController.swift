@@ -8,10 +8,17 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    private let network = Network.shared
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        print("jhgjhgb")
+        network.getPosts { posts in
+            for i in posts {
+                print(i.title)
+            }
+        }
     }
 
 
