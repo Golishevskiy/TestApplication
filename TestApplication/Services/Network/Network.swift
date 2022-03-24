@@ -30,5 +30,28 @@ class Network {
             }
         }.resume()
     }
+    
+    func getPost(postId: String, completion: @escaping (Post) -> Void) {
+        let session = URLSession(configuration: .default)
+        guard let url = URL(string: "https://raw.githubusercontent.com/aShaforostov/jsons/master/api/posts/\(postId).json") else { return }
+        
+        session.dataTask(with: url) { (data, response, error) in
+            
+            if let error = error {
+                print("DataTask error: \(error.localizedDescription)")
+            } else if
+                let data = data,
+                let response = response as? HTTPURLResponse,
+                response.statusCode == 200 {
+                print(data)
+                let response = try? JSONDecoder().decode(DetailPost.self, from: data)
+                guard let post = response?.post else { return }
+                print(post)
+                DispatchQueue.main.async {
+                    completion(post)
+                }
+            }
+        }.resume()
+    }
 }
 
